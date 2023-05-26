@@ -24,7 +24,8 @@ class HomeScreen extends StatefulWidget with GetItStatefulWidgetMixin {
 
 /// Shows a horizontally scrollable list PageView sandwiched between Foreground and Background layers
 /// arranged in a parallax style.
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   late final PageController _pageController;
   List<WonderData> get _wonders => wondersLogic.all;
   bool _isMenuOpen = false;
@@ -46,7 +47,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   WonderData get currentWonder => _wonders[_wonderIndex];
 
-  late final _VerticalSwipeController _swipeController = _VerticalSwipeController(this, _showDetailsPage);
+  late final _VerticalSwipeController _swipeController =
+      _VerticalSwipeController(this, _showDetailsPage);
 
   bool _isSelected(WonderType t) => t == currentWonder.type;
 
@@ -56,7 +58,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     // Create page controller,
     // allow 'infinite' scrolling by starting at a very high page, or remember the previous value
     final initialPage = _numWonders * 9999;
-    _pageController = PageController(viewportFraction: 1, initialPage: initialPage);
+    _pageController =
+        PageController(viewportFraction: 1, initialPage: initialPage);
     _wonderIndex = initialPage % _numWonders;
   }
 
@@ -69,7 +72,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   void _handleOpenMenuPressed() async {
     setState(() => _isMenuOpen = true);
-    WonderType? pickedWonder = await appLogic.showFullscreenDialogRoute<WonderType>(
+    WonderType? pickedWonder =
+        await appLogic.showFullscreenDialogRoute<WonderType>(
       context,
       HomeMenu(data: currentWonder),
       transparent: true,
@@ -90,7 +94,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void _setPageIndex(int index) {
     if (index == _wonderIndex) return;
     // To support infinite scrolling, we can't jump directly to the pressed index. Instead, make it relative to our current position.
-    final pos = ((_pageController.page ?? 0) / _numWonders).floor() * _numWonders;
+    final pos =
+        ((_pageController.page ?? 0) / _numWonders).floor() * _numWonders;
     _pageController.jumpToPage(pos + index);
   }
 
@@ -174,7 +179,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     return [
       // Background
       ..._wonders.map((e) {
-        final config = WonderIllustrationConfig.bg(isShowing: _isSelected(e.type));
+        final config =
+            WonderIllustrationConfig.bg(isShowing: _isSelected(e.type));
         return WonderIllustration(e.type, config: config);
       }).toList(),
       // Clouds
@@ -188,7 +194,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   Widget _buildFgAndGradients() {
     Widget buildSwipeableBgGradient(Color fgColor) {
-      return _swipeController.buildListener(builder: (swipeAmt, isPointerDown, _) {
+      return _swipeController.buildListener(
+          builder: (swipeAmt, isPointerDown, _) {
         return IgnorePointer(
           child: FractionallySizedBox(
             heightFactor: .6,
@@ -199,7 +206,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   end: Alignment.bottomCenter,
                   colors: [
                     fgColor.withOpacity(0),
-                    fgColor.withOpacity(.5 + fgColor.opacity * .25 + (isPointerDown ? .05 : 0) + swipeAmt * .20),
+                    fgColor.withOpacity(.5 +
+                        fgColor.opacity * .25 +
+                        (isPointerDown ? .05 : 0) +
+                        swipeAmt * .20),
                   ],
                   stops: const [0, 1],
                 ),
@@ -227,7 +237,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           return Animate(
               effects: const [FadeEffect()],
               onPlay: _handleFadeAnimInit,
-              child: IgnorePointer(child: WonderIllustration(e.type, config: config)));
+              child: IgnorePointer(
+                  child: WonderIllustration(e.type, config: config)));
         });
       }).toList(),
 
@@ -270,7 +281,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                               onDecrease: () => _setPageIndex(_wonderIndex - 1),
                               onTap: () => _showDetailsPage(),
                               // Hide the title when the menu is open for visual polish
-                              child: WonderTitleText(currentWonder, enableShadows: true),
+                              child: WonderTitleText(currentWonder,
+                                  enableShadows: true),
                             ),
                             Gap($styles.insets.md),
                             AppPageIndicator(
@@ -306,18 +318,24 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                             return FractionallySizedBox(
                               alignment: Alignment.bottomCenter,
                               heightFactor: heightFactor,
-                              child: Opacity(opacity: swipeAmt * .5, child: child),
+                              child:
+                                  Opacity(opacity: swipeAmt * .5, child: child),
                             );
                           },
                           child: VtGradient(
-                            [$styles.colors.white.withOpacity(0), $styles.colors.white.withOpacity(1)],
+                            [
+                              $styles.colors.white.withOpacity(0),
+                              $styles.colors.white.withOpacity(1)
+                            ],
                             const [.3, 1],
                             borderRadius: BorderRadius.circular(99),
                           ),
                         )),
 
                         /// Arrow Btn that fades in and out
-                        _AnimatedArrowButton(onTap: _showDetailsPage, semanticTitle: currentWonder.title),
+                        _AnimatedArrowButton(
+                            onTap: _showDetailsPage,
+                            semanticTitle: currentWonder.title),
                       ],
                     ),
                   ),

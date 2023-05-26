@@ -24,21 +24,24 @@ class CollectionScreen extends StatefulWidget with GetItStatefulWidgetMixin {
   State<CollectionScreen> createState() => _CollectionScreenState();
 }
 
-class _CollectionScreenState extends State<CollectionScreen> with GetItStateMixin {
+class _CollectionScreenState extends State<CollectionScreen>
+    with GetItStateMixin {
   final GlobalKey _scrollKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     final states = collectiblesLogic.statesById.value;
-    if (widget.fromId.isNotEmpty && states[widget.fromId] == CollectibleState.discovered) {
+    if (widget.fromId.isNotEmpty &&
+        states[widget.fromId] == CollectibleState.discovered) {
       scheduleMicrotask(() => _scrollToTarget(false));
     }
   }
 
   void _scrollToTarget([bool animate = true]) {
     if (_scrollKey.currentContext != null) {
-      Scrollable.ensureVisible(_scrollKey.currentContext!, alignment: 0.15, duration: animate ? 300.ms : 0.ms);
+      Scrollable.ensureVisible(_scrollKey.currentContext!,
+          alignment: 0.15, duration: animate ? 300.ms : 0.ms);
     }
   }
 
@@ -66,8 +69,16 @@ class _CollectionScreenState extends State<CollectionScreen> with GetItStateMixi
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                AppHeader(title: $strings.collectionTitleCollection, isTransparent: true),
-                _NewlyDiscoveredItemsBtn(count: discovered, onPressed: _scrollToTarget),
+                ///顶部AppBar标题
+                AppHeader(
+                    title: $strings.collectionTitleCollection,
+                    isTransparent: true),
+
+                ///?
+                _NewlyDiscoveredItemsBtn(
+                    count: discovered, onPressed: _scrollToTarget),
+
+                ///与Expanded组件不同，Flexible它不强制子组件填充可用空间
                 Flexible(
                   child: _CollectionList(
                     fromId: widget.fromId,
@@ -78,6 +89,8 @@ class _CollectionScreenState extends State<CollectionScreen> with GetItStateMixi
               ],
             ),
           ),
+
+          ///'已发现 0%'进度条
           _CollectionFooter(count: discovered + explored, total: total),
         ],
       ),

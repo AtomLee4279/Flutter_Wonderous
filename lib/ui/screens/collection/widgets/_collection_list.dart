@@ -25,12 +25,15 @@ class _CollectionList extends StatelessWidget with GetItMixin {
 
   @override
   Widget build(BuildContext context) {
+    ///watchX:只监听CollectiblesLogic对象内statesById的变化
     watchX((CollectiblesLogic o) => o.statesById);
     List<WonderData> wonders = wondersLogic.all;
     bool vtMode = context.isLandscape == false;
     final scrollWonder = scrollTargetWonder;
     // Create list of collections that is shared by both hz and vt layouts
+    ///创建一个支持水平和垂直布局的列表
     List<Widget> collections = [
+      ///'...'表示仍是List中的元素？
       ...wonders.map((d) {
         return _CollectionListCard(
           key: d.type == scrollWonder ? scrollKey : null,
@@ -45,13 +48,18 @@ class _CollectionList extends StatelessWidget with GetItMixin {
     return SingleChildScrollView(
       scrollDirection: vtMode ? Axis.vertical : Axis.horizontal,
       child: Padding(
+        ///所有收藏品外边距
         padding: EdgeInsets.all($styles.insets.lg),
+
+        ///SeparatedFlex:封装了分割线设定的Row/Column
         child: SeparatedFlex(
           direction: vtMode ? Axis.vertical : Axis.horizontal,
           mainAxisSize: MainAxisSize.min,
           separatorBuilder: () => Gap($styles.insets.lg),
           children: [
             ...collections,
+
+            ///滑动到最底部，与按钮的间隔
             Gap($styles.insets.sm),
             if (kDebugMode) _buildResetBtn(context),
           ],
@@ -67,6 +75,9 @@ class _CollectionList extends StatelessWidget with GetItMixin {
       isSecondary: true,
       expand: true,
     );
-    return AnimatedOpacity(opacity: onReset == null ? 0.25 : 1, duration: $styles.times.fast, child: btn);
+    return AnimatedOpacity(
+        opacity: onReset == null ? 0.25 : 1,
+        duration: $styles.times.fast,
+        child: btn);
   }
 }

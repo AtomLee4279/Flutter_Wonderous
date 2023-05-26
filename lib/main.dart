@@ -37,7 +37,8 @@ class WondersApp extends StatelessWidget with GetItMixin {
       locale: locale == null ? null : Locale(locale),
       debugShowCheckedModeBanner: false,
       routerDelegate: appRouter.routerDelegate,
-      theme: ThemeData(fontFamily: $styles.text.body.fontFamily, useMaterial3: true),
+      theme: ThemeData(
+          fontFamily: $styles.text.body.fontFamily, useMaterial3: true),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -71,7 +72,9 @@ void registerSingletons() {
 }
 
 /// Add syntax sugar for quickly accessing the main "logic" controllers in the app
+/// 添加语法糖以快速访问应用程序中的主要“逻辑”控制器
 /// We deliberately do not create shortcuts for services, to discourage their use directly in the view/widget layer.
+/// 我们故意不为服务创建快捷方式，以阻止它们直接在视图/小部件层中使用。
 AppLogic get appLogic => GetIt.I.get<AppLogic>();
 WondersLogic get wondersLogic => GetIt.I.get<WondersLogic>();
 TimelineLogic get timelineLogic => GetIt.I.get<TimelineLogic>();

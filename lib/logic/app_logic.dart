@@ -11,14 +11,19 @@ import 'package:wonders/ui/common/utils/page_routes.dart';
 class AppLogic {
   /// Indicates to the rest of the app that bootstrap has not completed.
   /// The router will use this to prevent redirects while bootstrapping.
+  /// /// 向应用程序的其余部分指示引导程序尚未完成。
+  /// 路由器将使用它来防止引导时的重定向。
   bool isBootstrapComplete = false;
 
   /// Indicates which orientations the app will allow be default. Affects Android/iOS devices only.
   /// Defaults to both landscape (hz) and portrait (vt)
+  /// （仅对Android/IOS起效）指定了app的默认旋转方向
   List<Axis> supportedOrientations = [Axis.vertical, Axis.horizontal];
 
   /// Allow a view to override the currently supported orientations. For example, [FullscreenVideoViewer] always wants to enable both landscape and portrait.
   /// If a view sets this override, they are responsible for setting it back to null when finished.
+  /// 允许视图覆盖当前支持的方向。例如，[FullscreenVideoViewer] 总是希望同时启用横向和纵向。
+  /// 如果一个视图设置了这个覆盖，他们有责任在完成后将它设置回 null。
   List<Axis>? _supportedOrientationsOverride;
   set supportedOrientationsOverride(List<Axis>? value) {
     if (_supportedOrientationsOverride != value) {
@@ -71,7 +76,8 @@ class AppLogic {
     }
   }
 
-  Future<T?> showFullscreenDialogRoute<T>(BuildContext context, Widget child, {bool transparent = false}) async {
+  Future<T?> showFullscreenDialogRoute<T>(BuildContext context, Widget child,
+      {bool transparent = false}) async {
     return await Navigator.of(context).push<T>(
       PageRoutes.dialog<T>(child, duration: $styles.times.pageTransition),
     );
@@ -81,13 +87,15 @@ class AppLogic {
   void handleAppSizeChanged() {
     /// Disable landscape layout on smaller form factors
     bool isSmall = display.size.shortestSide / display.devicePixelRatio < 600;
-    supportedOrientations = isSmall ? [Axis.vertical] : [Axis.vertical, Axis.horizontal];
+    supportedOrientations =
+        isSmall ? [Axis.vertical] : [Axis.vertical, Axis.horizontal];
     _updateSystemOrientation();
   }
 
   Display get display => PlatformDispatcher.instance.displays.first;
 
-  bool shouldUseNavRail() => display.size.width > display.size.height && display.size.height > 250;
+  bool shouldUseNavRail() =>
+      display.size.width > display.size.height && display.size.height > 250;
 
   /// Enable landscape, portrait or both. Views can call this method to override the default settings.
   /// For example, the [FullscreenVideoViewer] always wants to enable both landscape and portrait.

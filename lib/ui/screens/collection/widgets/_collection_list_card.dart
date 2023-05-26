@@ -1,7 +1,14 @@
 part of '../collection_screen.dart';
 
+///某一类收藏品列表（作为卡片）
 class _CollectionListCard extends StatelessWidget with GetItMixin {
-  _CollectionListCard({Key? key, this.width, this.height, required this.data, required this.fromId}) : super(key: key);
+  _CollectionListCard(
+      {Key? key,
+      this.width,
+      this.height,
+      required this.data,
+      required this.fromId})
+      : super(key: key);
 
   final double? width;
   final double? height;
@@ -10,7 +17,8 @@ class _CollectionListCard extends StatelessWidget with GetItMixin {
 
   void _showDetails(BuildContext context, CollectibleData collectible) {
     context.push(ScreenPaths.artifact(collectible.artifactId));
-    Future.delayed(300.ms).then((_) => collectiblesLogic.setState(collectible.id, CollectibleState.explored));
+    Future.delayed(300.ms).then((_) =>
+        collectiblesLogic.setState(collectible.id, CollectibleState.explored));
   }
 
   @override
@@ -28,7 +36,8 @@ class _CollectionListCard extends StatelessWidget with GetItMixin {
             Text(
               data.title.toUpperCase(),
               textAlign: TextAlign.left,
-              style: $styles.text.title1.copyWith(color: $styles.colors.offWhite),
+              style:
+                  $styles.text.title1.copyWith(color: $styles.colors.offWhite),
             ),
             Gap($styles.insets.md),
 
@@ -45,7 +54,9 @@ class _CollectionListCard extends StatelessWidget with GetItMixin {
                           collectible: e,
                           state: state,
                           onPressed: (c) => _showDetails(context, c),
-                          heroTag: e.id == fromId ? 'collectible_image_$fromId' : null,
+                          heroTag: e.id == fromId
+                              ? 'collectible_image_$fromId'
+                              : null,
                         ),
                       );
                     }).toList()
