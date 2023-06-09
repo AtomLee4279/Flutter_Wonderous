@@ -63,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen>
     _wonderIndex = initialPage % _numWonders;
   }
 
+  ///处理页面左右翻页
   void _handlePageChanged(value) {
     setState(() {
       _wonderIndex = value % _numWonders;
@@ -70,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen>
     AppHaptics.lightImpact();
   }
 
+  ///处理左上角菜单页面的打开
   void _handleOpenMenuPressed() async {
     setState(() => _isMenuOpen = true);
     WonderType? pickedWonder =

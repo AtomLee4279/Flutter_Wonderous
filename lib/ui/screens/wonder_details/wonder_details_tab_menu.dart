@@ -2,6 +2,8 @@ import 'package:wonders/common_libs.dart';
 
 class WonderDetailsTabMenu extends StatelessWidget {
   static const double buttonInset = 12;
+
+  ///tab按钮前面的home按钮
   static const double homeBtnSize = 74;
   static const double minTabSize = 25;
   static const double maxTabSize = 100;
@@ -18,27 +20,44 @@ class WonderDetailsTabMenu extends StatelessWidget {
   final bool showBg;
   final WonderType wonderType;
   final Axis axis;
+
+  ///tab按钮是否水平排列（默认水平）
   bool get isVertical => axis == Axis.vertical;
 
   @override
   Widget build(BuildContext context) {
     Color iconColor = showBg ? $styles.colors.black : $styles.colors.white;
     // Measure available size after subtracting the home button size and insets
-    final availableSize = ((isVertical ? context.heightPx : context.widthPx) - homeBtnSize - $styles.insets.md);
+    ///计算减去home按钮及边距insets后的可用空间
+    final availableSize = ((isVertical ? context.heightPx : context.widthPx) -
+        homeBtnSize -
+        $styles.insets.md);
     // Calculate tabBtnSize based on availableSize
+    ///根据可用空间计算tab按钮尺寸
+    ///clamp：返回限制在[最小，最大]区间范围内的最邻近的值。
     final double tabBtnSize = (availableSize / 4).clamp(minTabSize, maxTabSize);
     // Figure out some extra gap, in the case that the tabBtns are wider than the homeBtn
+    ///计算额外间距，以防止tab按钮比home按钮还要宽
     final double gapAmt = max(0, tabBtnSize - homeBtnSize);
     // Store off safe areas which we will need to respect in the layout below
-    final double safeAreaBtm = context.mq.padding.bottom, safeAreaTop = context.mq.padding.top;
+    ///缓存安全区，以防底部布局异常
+    ///MediaQuery.of(context).padding: 用于获取上下左右的安全padding，这里获取了底部和顶部
+    final double safeAreaBtm = context.mq.padding.bottom,
+        safeAreaTop = context.mq.padding.top;
     // Insets the bg from the rounded wonder icon making it appear offset. The tab btns will use the same padding.
-    final buttonInsetPadding = isVertical ? EdgeInsets.only(right: buttonInset) : EdgeInsets.only(top: buttonInset);
+    ///?从圆形奇迹图标中插入背景，使其看起来偏移。选项卡 btns 将使用相同的填充
+    final buttonInsetPadding = isVertical
+        ? EdgeInsets.only(right: buttonInset)
+        : EdgeInsets.only(top: buttonInset);
     return Padding(
-      padding: isVertical ? EdgeInsets.only(top: safeAreaTop) : EdgeInsets.zero,
+      padding: isVertical
+          ? EdgeInsets.only(top: safeAreaTop)
+          : EdgeInsets.only(top: safeAreaTop),
       child: Stack(
         children: [
           /// Background, animates in and out based on `showBg`,
           /// has padding along the inside edge which makes the home-btn appear to hang over the edge.
+          /// 背景，借助“showBg”变量做进入和出去的动画
           Positioned.fill(
             child: Padding(
               padding: buttonInsetPadding,
@@ -48,7 +67,9 @@ class WonderDetailsTabMenu extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: $styles.colors.white,
-                    borderRadius: isVertical ? BorderRadius.only(topRight: Radius.circular(32)) : null,
+                    borderRadius: isVertical
+                        ? BorderRadius.only(topRight: Radius.circular(32))
+                        : null,
                   ),
                 ),
               ),
@@ -57,12 +78,16 @@ class WonderDetailsTabMenu extends StatelessWidget {
 
           /// Buttons
           /// A centered row / column of tabButtons w/ an wonder home button
+          /// 部署按钮（一行tab按钮+一个home按钮）
           Padding(
             /// When in hz mode add safeArea bottom padding, vertical layout should not need it
             padding: EdgeInsets.only(bottom: isVertical ? 0 : safeAreaBtm),
             child: SizedBox(
               width: isVertical ? null : double.infinity,
               height: isVertical ? double.infinity : null,
+
+              ///FocusTraversalGroup:一个小部件，
+              ///描述其后代的焦点遍历的继承焦点策略，将它们分组到一个单独的遍历组中。
               child: FocusTraversalGroup(
                 child: Flex(
                   direction: axis,
@@ -145,7 +170,11 @@ class WonderDetailsTabMenu extends StatelessWidget {
 }
 
 class _WonderHomeBtn extends StatelessWidget {
-  const _WonderHomeBtn({Key? key, required this.size, required this.wonderType, required this.borderSize})
+  const _WonderHomeBtn(
+      {Key? key,
+      required this.size,
+      required this.wonderType,
+      required this.borderSize})
       : super(key: key);
 
   final double size;
@@ -167,7 +196,8 @@ class _WonderHomeBtn extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(99),
           color: wonderType.fgColor,
-          image: DecorationImage(image: AssetImage(wonderType.homeBtn), fit: BoxFit.fill),
+          image: DecorationImage(
+              image: AssetImage(wonderType.homeBtn), fit: BoxFit.fill),
         ),
       ),
     );
@@ -204,11 +234,15 @@ class _TabBtn extends StatelessWidget {
     //     ? SizedBox(height: mainAxisSize, width: crossBtnSize, child: Placeholder())
     //     : SizedBox(height: crossBtnSize, width: mainAxisSize, child: Placeholder());
     bool selected = tabController.index == index;
-    final MaterialLocalizations localizations = MaterialLocalizations.of(context);
-    final iconImgPath = '${ImagePaths.common}/tab-$iconImg${selected ? '-active' : ''}.png';
-    String tabLabel = localizations.tabLabel(tabIndex: index + 1, tabCount: tabController.length);
+    final MaterialLocalizations localizations =
+        MaterialLocalizations.of(context);
+    final iconImgPath =
+        '${ImagePaths.common}/tab-$iconImg${selected ? '-active' : ''}.png';
+    String tabLabel = localizations.tabLabel(
+        tabIndex: index + 1, tabCount: tabController.length);
     tabLabel = '$label: $tabLabel';
 
+    ///计算底部icon尺寸：取两者最小
     final double iconSize = min(mainAxisSize, 32);
 
     return MergeSemantics(
@@ -219,7 +253,9 @@ class _TabBtn extends StatelessWidget {
           child: AppBtn.basic(
             onPressed: () => tabController.index = index,
             semanticLabel: label,
-            minimumSize: _isVertical ? Size(crossBtnSize, mainAxisSize) : Size(mainAxisSize, crossBtnSize),
+            minimumSize: _isVertical
+                ? Size(crossBtnSize, mainAxisSize)
+                : Size(mainAxisSize, crossBtnSize),
             // Image icon
             child: Image.asset(
               iconImgPath,

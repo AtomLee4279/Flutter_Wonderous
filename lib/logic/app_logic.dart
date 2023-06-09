@@ -34,40 +34,52 @@ class AppLogic {
 
   /// Initialize the app and all main actors.
   /// Loads settings, sets up services etc.
+  /// 初始化app所有主要行为
+  /// 加载相关设置等
   Future<void> bootstrap() async {
     debugPrint('bootstrap start...');
     // Set min-sizes for desktop apps
+    ///若：是桌面端，设置最小尺寸
     if (PlatformInfo.isDesktop) {
       await DesktopWindow.setMinWindowSize($styles.sizes.minAppSize);
     }
 
     // Load any bitmaps the views might need
+    ///加载所有Views所需的位图
     await AppBitmaps.init();
 
     // Set preferred refresh rate to the max possible (the OS may ignore this)
+    ///尽可能地设置最大刷新率（系统可能会忽略该设置）
     if (PlatformInfo.isAndroid) {
       await FlutterDisplayMode.setHighRefreshRate();
     }
 
     // Settings
+    ///加载设置逻辑
     await settingsLogic.load();
 
     // Localizations
+    ///加载多语言
     await localeLogic.load();
 
     // Wonders Data
+    ///初始化Wonders数据的业务逻辑
     wondersLogic.init();
 
     // Events
+    ///初始化时间线事件
     timelineLogic.init();
 
     // Collectibles
+    ///收藏品逻辑
     await collectiblesLogic.load();
 
     // Flag bootStrap as complete
+    ///初始化完成标志位设为true
     isBootstrapComplete = true;
 
     // Load initial view (replace empty initial view which is covered by a native splash screen)
+    ///加载起初的页面（替换空的初始页，该初始页面曾经被原生闪屏页所覆盖）
     bool showIntro = settingsLogic.hasCompletedOnboarding.value == false;
     if (showIntro) {
       appRouter.go(ScreenPaths.intro);

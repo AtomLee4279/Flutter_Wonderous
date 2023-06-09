@@ -7,6 +7,7 @@ import 'package:wonders/ui/common/static_text_scale.dart';
 import 'package:wonders/ui/common/themed_text.dart';
 import 'package:wonders/ui/common/utils/app_haptics.dart';
 
+///进入首页前的app介绍页面，包含左右滑动的介绍内容
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);
 
@@ -22,7 +23,8 @@ class _IntroScreenState extends State<IntroScreen> {
 
   static List<_PageData> pageData = [];
 
-  late final PageController _pageController = PageController()..addListener(_handlePageChanged);
+  late final PageController _pageController = PageController()
+    ..addListener(_handlePageChanged);
   final ValueNotifier<int> _currentPage = ValueNotifier(0);
   bool get _isOnLastPage => _currentPage.value.round() == pageData.length - 1;
   @override
@@ -51,16 +53,20 @@ class _IntroScreenState extends State<IntroScreen> {
   void _handleNavTextDoubleTapped() {
     final int current = _pageController.page!.round();
     if (_isOnLastPage) return;
-    _pageController.animateToPage(current + 1, duration: 250.ms, curve: Curves.easeIn);
+    _pageController.animateToPage(current + 1,
+        duration: 250.ms, curve: Curves.easeIn);
   }
 
   @override
   Widget build(BuildContext context) {
     // Set the page data, as strings may have changed based on locale
     pageData = [
-      _PageData($strings.introTitleJourney, $strings.introDescriptionNavigate, 'camel', '1'),
-      _PageData($strings.introTitleExplore, $strings.introDescriptionUncover, 'petra', '2'),
-      _PageData($strings.introTitleDiscover, $strings.introDescriptionLearn, 'statue', '3'),
+      _PageData($strings.introTitleJourney, $strings.introDescriptionNavigate,
+          'camel', '1'),
+      _PageData($strings.introTitleExplore, $strings.introDescriptionUncover,
+          'petra', '2'),
+      _PageData($strings.introTitleDiscover, $strings.introDescriptionLearn,
+          'statue', '3'),
     ];
 
     // This view uses a full screen PageView to enable swipe navigation.
@@ -118,7 +124,8 @@ class _IntroScreenState extends State<IntroScreen> {
                           return AnimatedSwitcher(
                             duration: $styles.times.slow,
                             child: KeyedSubtree(
-                              key: ValueKey(value), // so AnimatedSwitcher sees it as a different child.
+                              key: ValueKey(
+                                  value), // so AnimatedSwitcher sees it as a different child.
                               child: _PageImage(data: pageData[value]),
                             ),
                           );
@@ -134,7 +141,9 @@ class _IntroScreenState extends State<IntroScreen> {
                       height: _pageIndicatorHeight,
                       alignment: Alignment(0.0, 0),
                       child: AppPageIndicator(
-                          count: pageData.length, controller: _pageController, color: $styles.colors.offWhite),
+                          count: pageData.length,
+                          controller: _pageController,
+                          color: $styles.colors.offWhite),
                     ),
 
                     Spacer(flex: 2),
@@ -216,7 +225,8 @@ class _IntroScreenState extends State<IntroScreen> {
           child: Semantics(
             onTapHint: $strings.introSemanticNavigate,
             onTap: _isOnLastPage ? null : _handleNavTextDoubleTapped,
-            child: Text($strings.introSemanticSwipeLeft, style: $styles.text.bodySmall),
+            child: Text($strings.introSemanticSwipeLeft,
+                style: $styles.text.bodySmall),
           ),
         );
       },
@@ -234,6 +244,7 @@ class _PageData {
   final String mask;
 }
 
+///封装介绍app的单页内容
 class _Page extends StatelessWidget {
   const _Page({Key? key, required this.data}) : super(key: key);
 
@@ -255,9 +266,12 @@ class _Page extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(data.title, style: $styles.text.wonderTitle.copyWith(fontSize: 24 * $styles.scale)),
+                  Text(data.title,
+                      style: $styles.text.wonderTitle
+                          .copyWith(fontSize: 24 * $styles.scale)),
                   Gap($styles.insets.sm),
-                  Text(data.desc, style: $styles.text.body, textAlign: TextAlign.center),
+                  Text(data.desc,
+                      style: $styles.text.body, textAlign: TextAlign.center),
                 ],
               ),
             ),
@@ -277,13 +291,15 @@ class _WonderousLogo extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ExcludeSemantics(
-          child: SvgPicture.asset(SvgPaths.compassSimple, colorFilter: $styles.colors.offWhite.colorFilter, height: 48),
+          child: SvgPicture.asset(SvgPaths.compassSimple,
+              colorFilter: $styles.colors.offWhite.colorFilter, height: 48),
         ),
         Gap($styles.insets.xs),
         StaticTextScale(
           child: Text(
             $strings.introSemanticWonderous,
-            style: $styles.text.wonderTitle.copyWith(fontSize: 32 * $styles.scale, color: $styles.colors.offWhite),
+            style: $styles.text.wonderTitle.copyWith(
+                fontSize: 32 * $styles.scale, color: $styles.colors.offWhite),
           ),
         )
       ],
