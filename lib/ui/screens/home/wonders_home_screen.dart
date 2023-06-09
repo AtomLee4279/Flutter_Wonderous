@@ -135,15 +135,20 @@ class _HomeScreenState extends State<HomeScreen>
           Stack(
             children: [
               /// Background
+              /// 最底层的背景图和天上的云
               ..._buildBgAndClouds(),
 
               /// Wonders Illustrations (main content)
+              ///奇迹插图（中间的建筑物图案，其实包含了左右滑的pageView）
               _buildMgPageView(),
 
               /// Foreground illustrations and gradients
+              /// 画面前的渐变前景插图（类似舞台幕布）
               _buildFgAndGradients(),
 
               /// Controls that float on top of the various illustrations
+              ///浮在顶层的可交互控件
+              ///（包括：左上角：菜单按钮、底部：奇迹名称、（左右翻页）radio圆点、底部隐藏更多内容的提示箭头）
               _buildFloatingUi(),
             ],
           ).animate().fadeIn(),
