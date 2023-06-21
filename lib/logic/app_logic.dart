@@ -88,6 +88,7 @@ class AppLogic {
     }
   }
 
+  ///展示一个全屏对话框的Route
   Future<T?> showFullscreenDialogRoute<T>(BuildContext context, Widget child,
       {bool transparent = false}) async {
     return await Navigator.of(context).push<T>(
@@ -96,16 +97,23 @@ class AppLogic {
   }
 
   /// Called from the UI layer once a MediaQuery has been obtained
+  /// 该方法应该在外部获取到MediaQuery后，被UI层调用
+  /// 判断设备是否属于小屏幕类型，从而设置垂直/水平翻转
   void handleAppSizeChanged() {
-    /// Disable landscape layout on smaller form factors
+    ///判断是否是小屏幕设备
     bool isSmall = display.size.shortestSide / display.devicePixelRatio < 600;
+
+    /// Disable landscape layout on smaller form factors
+    /// 若是小屏幕，则仅支持竖屏
     supportedOrientations =
         isSmall ? [Axis.vertical] : [Axis.vertical, Axis.horizontal];
     _updateSystemOrientation();
   }
 
+  ///代表不同平台上渲染的【FlutterView】
   Display get display => PlatformDispatcher.instance.displays.first;
 
+  ///是否应该使用NavigationRail
   bool shouldUseNavRail() =>
       display.size.width > display.size.height && display.size.height > 250;
 

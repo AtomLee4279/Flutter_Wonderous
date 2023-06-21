@@ -3,6 +3,7 @@ import 'package:wonders/logic/common/json_prefs_file.dart';
 import 'package:wonders/logic/common/throttler.dart';
 
 ///这个mixin主要处理本地持久化的问题
+///而且是有延迟地存储
 mixin ThrottledSaveLoadMixin {
   late final _file = JsonPrefsFile(fileName);
   final _throttle = Throttler(const Duration(seconds: 2));
@@ -25,6 +26,7 @@ mixin ThrottledSaveLoadMixin {
     }
   }
 
+  ///有规划地存储
   Future<void> scheduleSave() async => _throttle.call(save);
 
   /// Serialization

@@ -10,7 +10,7 @@ class WondersAppScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Listen to the device size, and update AppStyle when it changes
-    ///监听设备尺寸变化，当它发生改变时，更新app的风格
+    ///监听设备尺寸变化，当它发生改变时，更新app的风格（更改支持的横/竖屏设置）
     MediaQuery.of(context);
     appLogic.handleAppSizeChanged();
     // Set default timing for animations in the app

@@ -123,6 +123,8 @@ class _IntroScreenState extends State<IntroScreen> {
                         builder: (_, value, __) {
                           return AnimatedSwitcher(
                             duration: $styles.times.slow,
+
+                            ///监听value（_currentPage）的变化，更新child
                             child: KeyedSubtree(
                               key: ValueKey(
                                   value), // so AnimatedSwitcher sees it as a different child.
@@ -137,9 +139,9 @@ class _IntroScreenState extends State<IntroScreen> {
                     Gap(_IntroScreenState._textHeight),
 
                     // page indicator:
+                    ///底部的页码指示器
                     Container(
                       height: _pageIndicatorHeight,
-                      alignment: Alignment(0.0, 0),
                       child: AppPageIndicator(
                           count: pageData.length,
                           controller: _pageController,
@@ -307,6 +309,7 @@ class _WonderousLogo extends StatelessWidget {
   }
 }
 
+///Intro中间的图片+透明带洞的遮罩
 class _PageImage extends StatelessWidget {
   const _PageImage({Key? key, required this.data}) : super(key: key);
 

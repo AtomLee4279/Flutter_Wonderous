@@ -10,7 +10,8 @@ class AppPageIndicator extends StatefulWidget {
     this.color,
     this.dotSize,
     String? semanticPageTitle,
-  })  : semanticPageTitle = semanticPageTitle ?? $strings.appPageDefaultTitlePage,
+  })  : semanticPageTitle =
+            semanticPageTitle ?? $strings.appPageDefaultTitlePage,
         super(key: key);
   final int count;
   final PageController controller;
@@ -63,6 +64,7 @@ class _AppPageIndicatorState extends State<AppPageIndicator> {
       Positioned.fill(
         child: Center(
           child: ExcludeSemantics(
+            ///第三方库:页面指示器
             child: SmoothPageIndicator(
               controller: widget.controller,
               count: widget.count,
