@@ -2,17 +2,21 @@ import 'dart:ui';
 
 import 'package:wonders/common_libs.dart';
 import 'package:wonders/logic/data/highlight_data.dart';
-import 'package:wonders/ui/common/app_icons.dart';
-import 'package:wonders/ui/common/controls/app_header.dart';
 import 'package:wonders/ui/common/controls/app_page_indicator.dart';
 import 'package:wonders/ui/common/static_text_scale.dart';
+
+import '../../../common/app_icons.dart';
+import '../../../common/controls/app_header.dart';
 
 part 'widgets/_blurred_image_bg.dart';
 part 'widgets/_bottom_text_content.dart';
 part 'widgets/_collapsing_carousel_item.dart';
 
+///艺术品轮播展示页面
 class ArtifactCarouselScreen extends StatefulWidget {
-  const ArtifactCarouselScreen({Key? key, required this.type, this.contentPadding = EdgeInsets.zero}) : super(key: key);
+  const ArtifactCarouselScreen(
+      {Key? key, required this.type, this.contentPadding = EdgeInsets.zero})
+      : super(key: key);
   final WonderType type;
   final EdgeInsets contentPadding;
 
@@ -24,7 +28,8 @@ class _ArtifactScreenState extends State<ArtifactCarouselScreen> {
   PageController? _pageController;
   final _currentPage = ValueNotifier<double>(9999);
 
-  late final List<HighlightData> _artifacts = HighlightData.forWonder(widget.type);
+  late final List<HighlightData> _artifacts =
+      HighlightData.forWonder(widget.type);
   late final _currentArtifactIndex = ValueNotifier<int>(_wrappedPageIndex);
 
   int get _wrappedPageIndex => _currentPage.value.round() % _artifacts.length;
@@ -36,12 +41,17 @@ class _ArtifactScreenState extends State<ArtifactCarouselScreen> {
 
   void _handleSearchTap() => context.push(ScreenPaths.search(widget.type));
 
+  ///点击进入艺术品详情页/切换到新的“转盘”item
   void _handleArtifactTap(int index) {
     int delta = index - _currentPage.value.round();
+
+    ///如果点击的是当前已经在“转盘”上（处于选中状态）的item：
+    ///进入艺术品详情页
     if (delta == 0) {
       HighlightData data = _artifacts[index % _artifacts.length];
       context.push(ScreenPaths.artifact(data.artifactId));
     } else {
+      ///转盘切换到新的item
       _pageController?.animateToPage(
         _currentPage.value.round() + delta,
         duration: $styles.times.fast,
@@ -53,7 +63,8 @@ class _ArtifactScreenState extends State<ArtifactCarouselScreen> {
   @override
   Widget build(BuildContext context) {
     bool shortMode = context.heightPx <= 800;
-    final double bottomHeight = context.heightPx / 2.75; // Prev 340, dynamic seems to work better
+    final double bottomHeight =
+        context.heightPx / 2.75; // Prev 340, dynamic seems to work better
     // Allow objects to become wider as the screen becomes tall, this allows
     // them to grow taller as well, filling the available space better.
     double itemHeight = (context.heightPx - 200 - bottomHeight).clamp(250, 400);
@@ -91,6 +102,7 @@ class _ArtifactScreenState extends State<ArtifactCarouselScreen> {
                 _buildBgCircle(bottomHeight),
 
                 /// Carousel Items
+                /// “转盘”上的item
                 PageView.builder(
                   controller: _pageController,
                   itemBuilder: (_, index) {

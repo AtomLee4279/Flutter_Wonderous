@@ -5,7 +5,8 @@ class _VerticalSwipeController {
   final TickerProvider ticker;
   final swipeAmt = ValueNotifier<double>(0);
   final isPointerDown = ValueNotifier<bool>(false);
-  late final swipeReleaseAnim = AnimationController(vsync: ticker)..addListener(handleSwipeReleaseAnimTick);
+  late final swipeReleaseAnim = AnimationController(vsync: ticker)
+    ..addListener(handleSwipeReleaseAnimTick);
   final double _pullToViewDetailsThreshold = 150;
   final VoidCallback onSwipeComplete;
 
@@ -24,7 +25,9 @@ class _VerticalSwipeController {
     if (swipeReleaseAnim.isAnimating) swipeReleaseAnim.stop();
 
     isPointerDown.value = true;
-    double value = (swipeAmt.value - details.delta.dy / _pullToViewDetailsThreshold).clamp(0, 1);
+    double value =
+        (swipeAmt.value - details.delta.dy / _pullToViewDetailsThreshold)
+            .clamp(0, 1);
     if (value != swipeAmt.value) {
       swipeAmt.value = value;
       if (swipeAmt.value == 1) {
@@ -37,8 +40,14 @@ class _VerticalSwipeController {
 
   /// Utility method to wrap a couple of ValueListenableBuilders and pass the values into a builder methods.
   /// Saves the UI some boilerplate when subscribing to changes.
+  /// 用于包装几个 ValueListenableBuilder 并将值传递到builder方法的实用方法。
+  /// 订阅更改时为 UI 保存一些样板文件
   Widget buildListener(
-      {required Widget Function(double swipeUpAmt, bool isPointerDown, Widget? child) builder, Widget? child}) {
+      {required Widget Function(
+              double swipeUpAmt, bool isPointerDown, Widget? child)
+          builder,
+      Widget? child}) {
+    ///这里其实就是监听swipeAmt和isPointerDown的值的变化并回调出去
     return ValueListenableBuilder<double>(
       valueListenable: swipeAmt,
       builder: (_, swipeAmt, __) => ValueListenableBuilder<bool>(

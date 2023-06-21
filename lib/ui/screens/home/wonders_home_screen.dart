@@ -24,6 +24,9 @@ class HomeScreen extends StatefulWidget with GetItStatefulWidgetMixin {
 
 /// Shows a horizontally scrollable list PageView sandwiched between Foreground and Background layers
 /// arranged in a parallax style.
+/// 显示夹在前景层和背景层之间的水平可滚动列表 （PageView）。
+/// 它以视差样式排列
+///
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late final PageController _pageController;
@@ -36,13 +39,18 @@ class _HomeScreenState extends State<HomeScreen>
 
   /// Used to polish the transition when leaving this page for the details view.
   /// Used to capture the _swipeAmt at the time of transition, and freeze the wonder foreground in place as we transition away.
+  /// 用于离开此页面以查看详细信息视图时,做平滑过渡。
+  /// 用于在过渡时捕获 _swipeAmt，并在我们过渡离开时将奇迹前景冻结在适当的位置
   double? _swipeOverride;
 
   /// Used to let the foreground fade in when this view is returned to (from details)
+  /// 用于从详情返回此视图时，让前景淡入
   bool _fadeInOnNextBuild = false;
 
   /// All of the items that should fade in when returning from details view.
   /// Using individual tweens is more efficient than tween the entire parent
+  /// 当从详情页返回时，所有items都应该淡入
+  /// 使用独立的tweens比在整个parent-widget使用tweens更高效
   final _fadeAnims = <AnimationController>[];
 
   WonderData get currentWonder => _wonders[_wonderIndex];
@@ -101,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen>
     _pageController.jumpToPage(pos + index);
   }
 
+  ///push详情页
   void _showDetailsPage() async {
     _swipeOverride = _swipeController.swipeAmt.value;
     context.push(ScreenPaths.wonderDetails(currentWonder.type));
@@ -256,14 +265,22 @@ class _HomeScreenState extends State<HomeScreen>
     ]);
   }
 
+  ///浮在顶层的可交互控件
+  ///（包括：左上角：菜单按钮、底部：奇迹名称、（左右翻页）radio圆点、底部隐藏更多内容的提示箭头）
   Widget _buildFloatingUi() {
     return Stack(children: [
       /// Floating controls / UI
+      //[底部文字、（左右翻页）页面indicator、和向下箭头]
       AnimatedSwitcher(
         duration: $styles.times.fast,
         child: AnimatedOpacity(
           opacity: _isMenuOpen ? 0 : 1,
           duration: $styles.times.med,
+
+          ///RepaintBoundary：
+          ///将子widget分离到自己的层中，
+          ///确保层中的widget重构时，不会触发外部整体重构
+          ///使用这个需要权衡cpu和内存成本
           child: RepaintBoundary(
             child: OverflowBox(
               child: Column(
@@ -309,19 +326,26 @@ class _HomeScreenState extends State<HomeScreen>
 
                   /// Animated arrow and background
                   /// Wrap in a container that is full-width to make it easier to find for screen readers
+                  /// 对向下箭头和背景执行动画
+                  /// 将它们封装在Container内
                   Container(
                     width: double.infinity,
                     alignment: Alignment.center,
 
                     /// Lose state of child objects when index changes, this will re-run all the animated switcher and the arrow anim
+                    /// 当index改变的时候将丢弃子widget对象的状态
                     key: ValueKey(_wonderIndex),
                     child: Stack(
                       children: [
                         /// Expanding rounded rect that grows in height as user swipes up
+                        /// 当用户向上滑动（展示更多）时，拉伸圆角矩形的高度
                         Positioned.fill(
                             child: _swipeController.buildListener(
                           builder: (swipeAmt, _, child) {
                             double heightFactor = .5 + .5 * (1 + swipeAmt * 4);
+
+                            ///FractionallySizedBox：
+                            ///按照可用（宽/高）比例因子设置子widget占用的尺寸
                             return FractionallySizedBox(
                               alignment: Alignment.bottomCenter,
                               heightFactor: heightFactor,
@@ -329,6 +353,8 @@ class _HomeScreenState extends State<HomeScreen>
                                   Opacity(opacity: swipeAmt * .5, child: child),
                             );
                           },
+
+                          ///这里是拖动向下箭头按钮时出现的高度被拉长的矩形
                           child: VtGradient(
                             [
                               $styles.colors.white.withOpacity(0),
@@ -340,6 +366,7 @@ class _HomeScreenState extends State<HomeScreen>
                         )),
 
                         /// Arrow Btn that fades in and out
+                        /// 底部“展示更多”箭头按钮
                         _AnimatedArrowButton(
                             onTap: _showDetailsPage,
                             semanticTitle: currentWonder.title),
@@ -355,6 +382,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
 
       /// Menu Btn
+      /// 左上角的菜单按钮
       TopLeft(
         child: AnimatedOpacity(
           duration: $styles.times.fast,
