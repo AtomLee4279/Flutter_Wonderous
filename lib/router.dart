@@ -63,6 +63,8 @@ final appRouter = GoRouter(
           AppRoute('/video/:id', (s) {
             return FullscreenVideoViewer(id: s.params['id']!);
           }),
+
+          ///艺术品轮播标签页
           AppRoute('/highlights/:type', (s) {
             return ArtifactCarouselScreen(
                 type: _parseWonderType(s.params['type']));

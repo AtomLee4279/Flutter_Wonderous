@@ -52,8 +52,9 @@ class _WonderDetailsScreenState extends State<WonderDetailsScreen>
 
   @override
   Widget build(BuildContext context) {
+    ///判断tab是否需要使用NavigationRail
     _useNavRail = appLogic.shouldUseNavRail();
-
+    debugPrint('wonders_detail_screen-MediaQuery.of(this):${context.sizePx}');
     final wonder = wondersLogic.getData(widget.type);
     int tabIndex = _tabController.index;
 

@@ -132,8 +132,18 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+  ///由于该HomeScreen位于WondersAppScaffold的widget树KeyedSubtree()子节点之下，
+  ///```
+  ///KeyedSubtree(
+  ///       //用自适应缩放比例设置key，从而控制widget是否需要rebuild
+  ///       key: ValueKey($styles.scale),
+  ///       //...
+  ///       )
+  ///```
+  ///所以当屏幕尺寸比例发生改变(即：屏幕翻转/鼠标拉伸改变窗口尺寸等)时，将触发HomeScreen的rebuild
   @override
   Widget build(BuildContext context) {
+    debugPrint('HomeScreen-触发build');
     if (_fadeInOnNextBuild == true) {
       _startDelayedFgFade();
       _fadeInOnNextBuild = false;

@@ -100,6 +100,8 @@ class AppLogic {
   /// 该方法应该在外部获取到MediaQuery后，被UI层调用
   /// 判断设备是否属于小屏幕类型，从而设置垂直/水平翻转
   void handleAppSizeChanged() {
+    debugPrint('handleAppSizeChanged:为屏幕设置合适的垂直/水平翻转');
+
     ///判断是否是小屏幕设备
     bool isSmall = display.size.shortestSide / display.devicePixelRatio < 600;
 
@@ -114,13 +116,19 @@ class AppLogic {
   Display get display => PlatformDispatcher.instance.displays.first;
 
   ///是否应该使用NavigationRail
-  bool shouldUseNavRail() =>
-      display.size.width > display.size.height && display.size.height > 250;
+  ///横屏（宽>高）&& 高 >250
+  bool shouldUseNavRail() {
+    debugPrint(
+        'app_logic-shouldUseNavRail:width ${display.size.width},height ${display.size.height}');
+    return display.size.width > display.size.height &&
+        display.size.height > 250;
+  }
 
   /// Enable landscape, portrait or both. Views can call this method to override the default settings.
   /// For example, the [FullscreenVideoViewer] always wants to enable both landscape and portrait.
   /// If a view overrides this, it is responsible for setting it back to [supportedOrientations] when disposed.
   void _updateSystemOrientation() {
+    ///_supportedOrientationsOverride:当前是否有自定义支持的翻转方向；否则按照默认设定的屏幕翻转方向
     final axisList = _supportedOrientationsOverride ?? supportedOrientations;
     //debugPrint('updateDeviceOrientation, supportedAxis: $axisList');
     final orientations = <DeviceOrientation>[];
