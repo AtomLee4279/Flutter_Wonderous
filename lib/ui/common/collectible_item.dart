@@ -6,10 +6,13 @@ import 'package:wonders/ui/common/utils/app_haptics.dart';
 import 'package:wonders/ui/screens/collectible_found/collectible_found_screen.dart';
 
 class CollectibleItem extends StatelessWidget with GetItMixin {
-  CollectibleItem(this.collectible, {this.size = 64.0, Key? key}) : super(key: key) {
+  CollectibleItem(this.collectible, {this.size = 64.0, Key? key})
+      : super(key: key) {
     // pre-fetch the image, so it's ready if we show the collectible found screen.
     _imageProvider = NetworkImage(collectible.imageUrlSmall);
-    _imageProvider.resolve(ImageConfiguration()).addListener(ImageStreamListener((_, __) {}));
+    _imageProvider
+        .resolve(ImageConfiguration())
+        .addListener(ImageStreamListener((_, __) {}));
   }
 
   final CollectibleData collectible;
@@ -17,7 +20,8 @@ class CollectibleItem extends StatelessWidget with GetItMixin {
   late final ImageProvider _imageProvider;
 
   void _handleTap(BuildContext context) async {
-    final screen = CollectibleFoundScreen(collectible: collectible, imageProvider: _imageProvider);
+    final screen = CollectibleFoundScreen(
+        collectible: collectible, imageProvider: _imageProvider);
     appLogic.showFullscreenDialogRoute(context, screen, transparent: true);
     AppHaptics.mediumImpact();
 
