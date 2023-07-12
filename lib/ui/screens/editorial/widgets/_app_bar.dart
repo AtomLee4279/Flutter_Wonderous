@@ -1,7 +1,10 @@
 part of '../editorial_screen.dart';
 
+///WonderEditorialScreen中，标题与正文之间的AppBar
 class _AppBar extends StatelessWidget {
-  _AppBar(this.wonderType, {Key? key, required this.sectionIndex, required this.scrollPos}) : super(key: key);
+  _AppBar(this.wonderType,
+      {Key? key, required this.sectionIndex, required this.scrollPos})
+      : super(key: key);
   final WonderType wonderType;
   final ValueNotifier<int> sectionIndex;
   final ValueNotifier<double> scrollPos;
@@ -53,9 +56,12 @@ class _AppBar extends StatelessWidget {
               fit: StackFit.expand,
               children: [
                 /// Masked image
+                /// 被阴影覆盖的底图
                 BottomCenter(
                   child: SizedBox(
-                    width: showOverlay ? double.infinity : $styles.sizes.maxContentWidth1,
+                    width: showOverlay
+                        ? double.infinity
+                        : $styles.sizes.maxContentWidth1,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 50),
                       child: ClipPath(
@@ -75,12 +81,15 @@ class _AppBar extends StatelessWidget {
                             );
                           },
                         ),
-                      ).animate(delay: $styles.times.pageTransition + 500.ms).fadeIn(duration: $styles.times.slow),
+                      )
+                          .animate(delay: $styles.times.pageTransition + 500.ms)
+                          .fadeIn(duration: $styles.times.slow),
                     ),
                   ),
                 ),
 
                 /// Colored overlay
+                /// 带颜色的遮罩
                 if (showOverlay) ...[
                   AnimatedContainer(
                     duration: $styles.times.med,
@@ -92,6 +101,8 @@ class _AppBar extends StatelessWidget {
           ),
 
           /// Circular Titlebar
+          ///AppBar底部那个像半圆转盘一样的文字和图标
+          ///当滚动到不同的section时，可以转动转盘上的section标题文字
           BottomCenter(
             child: ValueListenableBuilder<int>(
               valueListenable: sectionIndex,

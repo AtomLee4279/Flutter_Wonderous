@@ -38,7 +38,9 @@ part 'widgets/_title_text.dart';
 part 'widgets/_top_illustration.dart';
 
 class WonderEditorialScreen extends StatefulWidget {
-  const WonderEditorialScreen(this.data, {Key? key, required this.contentPadding}) : super(key: key);
+  const WonderEditorialScreen(this.data,
+      {Key? key, required this.contentPadding})
+      : super(key: key);
   final WonderData data;
   //final void Function(double scrollPos) onScroll;
   final EdgeInsets contentPadding;
@@ -48,7 +50,8 @@ class WonderEditorialScreen extends StatefulWidget {
 }
 
 class _WonderEditorialScreenState extends State<WonderEditorialScreen> {
-  late final ScrollController _scroller = ScrollController()..addListener(_handleScrollChanged);
+  late final ScrollController _scroller = ScrollController()
+    ..addListener(_handleScrollChanged);
   final _scrollPos = ValueNotifier(0.0);
   final _sectionIndex = ValueNotifier(0);
 
@@ -71,7 +74,8 @@ class _WonderEditorialScreenState extends State<WonderEditorialScreen> {
       double minAppBarHeight = shortMode ? 80 : 150;
 
       /// Attempt to maintain a similar aspect ratio for the image within the app-bar
-      double maxAppBarHeight = min(context.widthPx, $styles.sizes.maxContentWidth1) * 1.2;
+      double maxAppBarHeight =
+          min(context.widthPx, $styles.sizes.maxContentWidth1) * 1.2;
       bool showBackBtn = appLogic.shouldUseNavRail() == false;
       return PopRouterOnOverScroll(
         controller: _scroller,
@@ -85,6 +89,7 @@ class _WonderEditorialScreenState extends State<WonderEditorialScreen> {
               ),
 
               /// Top Illustration - Sits underneath the scrolling content, fades out as it scrolls
+              /// 顶部插图 - 位于滚动内容最顶部，滚动时淡出
               SizedBox(
                 height: illustrationHeight,
                 child: ValueListenableBuilder<double>(
@@ -106,6 +111,7 @@ class _WonderEditorialScreenState extends State<WonderEditorialScreen> {
               ),
 
               /// Scrolling content - Includes an invisible gap at the top, and then scrolls over the illustration
+              /// 滚动主体内容
               TopCenter(
                 child: Padding(
                   padding: widget.contentPadding,
@@ -114,7 +120,8 @@ class _WonderEditorialScreenState extends State<WonderEditorialScreen> {
                       child: CustomScrollView(
                         primary: false,
                         controller: _scroller,
-                        scrollBehavior: ScrollConfiguration.of(context).copyWith(),
+                        scrollBehavior:
+                            ScrollConfiguration.of(context).copyWith(),
                         key: PageStorageKey('editorial'),
                         slivers: [
                           /// Invisible padding at the top of the list, so the illustration shows through the btm
@@ -123,22 +130,28 @@ class _WonderEditorialScreenState extends State<WonderEditorialScreen> {
                           ),
 
                           /// Text content, animates itself to hide behind the app bar as it scrolls up
+                          /// 顶部插图下方的标题文字
                           SliverToBoxAdapter(
                             child: ValueListenableBuilder<double>(
                               valueListenable: _scrollPos,
                               builder: (_, value, child) {
                                 double offsetAmt = max(0, value * .3);
-                                double opacity = (1 - offsetAmt / 150).clamp(0, 1);
+                                double opacity =
+                                    (1 - offsetAmt / 150).clamp(0, 1);
                                 return Transform.translate(
                                   offset: Offset(0, offsetAmt),
-                                  child: Opacity(opacity: opacity, child: child),
+                                  child:
+                                      Opacity(opacity: opacity, child: child),
                                 );
                               },
-                              child: _TitleText(widget.data, scroller: _scroller),
+                              child:
+                                  _TitleText(widget.data, scroller: _scroller),
                             ),
                           ),
 
                           /// Collapsing App bar, pins to the top of the list
+                          /// 标题文字与正文之间的大图片，(包括椭圆转盘的标题文字和图标)
+                          /// 把它做成折叠AppBar，固定到列表顶部
                           SliverAppBar(
                             pinned: true,
                             collapsedHeight: minAppBarHeight,
@@ -157,7 +170,10 @@ class _WonderEditorialScreenState extends State<WonderEditorialScreen> {
                           ),
 
                           /// Editorial content (text and images)
-                          _ScrollingContent(widget.data, scrollPos: _scrollPos, sectionNotifier: _sectionIndex),
+                          /// 正文内容（图文）
+                          _ScrollingContent(widget.data,
+                              scrollPos: _scrollPos,
+                              sectionNotifier: _sectionIndex),
                         ],
                       ),
                     ),
@@ -176,7 +192,8 @@ class _WonderEditorialScreenState extends State<WonderEditorialScreen> {
                         child: child,
                       );
                     },
-                    child: AppHeader(backIcon: AppIcons.north, isTransparent: true))
+                    child: AppHeader(
+                        backIcon: AppIcons.north, isTransparent: true))
               ],
             ],
           ),

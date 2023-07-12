@@ -56,6 +56,8 @@ final appRouter = GoRouter(
               initialTabIndex: tab,
             );
           }, useFade: true),
+
+          ///时间线标签页右上角点击进去的时间线详情页
           AppRoute('/timeline', (s) {
             return TimelineScreen(
                 type: _tryParseWonderType(s.queryParams['type']!));
@@ -73,9 +75,13 @@ final appRouter = GoRouter(
             return ArtifactSearchScreen(
                 type: _parseWonderType(s.params['type']));
           }),
+
+          ///艺术品轮播标签页点击某项进入的艺术品详情页
           AppRoute('/artifact/:id', (s) {
             return ArtifactDetailsScreen(artifactId: s.params['id']!);
           }),
+
+          ///首页左上角菜单-点击打开的藏品页
           AppRoute('/collection', (s) {
             return CollectionScreen(fromId: s.queryParams['id'] ?? '');
           }),

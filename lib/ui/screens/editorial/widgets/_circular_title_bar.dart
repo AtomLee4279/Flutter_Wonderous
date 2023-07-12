@@ -1,8 +1,13 @@
 part of '../editorial_screen.dart';
 
 class _CircularTitleBar extends StatelessWidget {
-  const _CircularTitleBar({Key? key, required this.titles, required this.icons, required this.index})
-      : assert(titles.length == icons.length, 'The number of titles and icons do not match.'),
+  const _CircularTitleBar(
+      {Key? key,
+      required this.titles,
+      required this.icons,
+      required this.index})
+      : assert(titles.length == icons.length,
+            'The number of titles and icons do not match.'),
         super(key: key);
   final List<String> titles;
   final List<String> icons;
@@ -13,8 +18,10 @@ class _CircularTitleBar extends StatelessWidget {
     double barSize = 100; // the actual size of this widget
     double barTopPadding = 40; // negative space at the top of the bar
     double circleSize = 190; // circle is bigger than bar, and overhangs it
-    assert(index >= 0 && index < titles.length, 'Can not find a title for index $index');
+    assert(index >= 0 && index < titles.length,
+        'Can not find a title for index $index');
     // note: this offset eliminates a subpixel line Flutter draws below the header
+    ///此偏移消除了 Flutter 在标题下方绘制的子像素线
     return Transform.translate(
       offset: Offset(0, 1),
       child: SizedBox(
@@ -22,8 +29,12 @@ class _CircularTitleBar extends StatelessWidget {
         child: Stack(
           children: [
             // Bg
-            BottomCenter(child: Container(height: barSize - barTopPadding, color: $styles.colors.offWhite)),
+            BottomCenter(
+                child: Container(
+                    height: barSize - barTopPadding,
+                    color: $styles.colors.offWhite)),
 
+            ///转盘标题文字
             ClipRect(
               child: OverflowBox(
                 alignment: Alignment.topCenter,
@@ -32,13 +43,18 @@ class _CircularTitleBar extends StatelessWidget {
               ),
             ),
 
+            ///转盘图标
             BottomCenter(
               child: Padding(
                 padding: EdgeInsets.only(bottom: 20),
                 child: Image.asset('${ImagePaths.common}/${icons[index]}')
                     .animate(key: ValueKey(index))
                     .fade()
-                    .scale(begin: .5, end: 1, curve: Curves.easeOutBack, duration: $styles.times.med),
+                    .scale(
+                        begin: .5,
+                        end: 1,
+                        curve: Curves.easeOutBack,
+                        duration: $styles.times.med),
               ),
             ),
           ],
@@ -59,10 +75,12 @@ class _AnimatedCircleWithText extends StatefulWidget {
   final int index;
 
   @override
-  State<_AnimatedCircleWithText> createState() => _AnimatedCircleWithTextState();
+  State<_AnimatedCircleWithText> createState() =>
+      _AnimatedCircleWithTextState();
 }
 
-class _AnimatedCircleWithTextState extends State<_AnimatedCircleWithText> with SingleTickerProviderStateMixin {
+class _AnimatedCircleWithTextState extends State<_AnimatedCircleWithText>
+    with SingleTickerProviderStateMixin {
   int _prevIndex = -1;
   String get oldTitle => _prevIndex == -1 ? '' : widget.titles[_prevIndex];
   String get newTitle => widget.titles[widget.index];
@@ -82,7 +100,9 @@ class _AnimatedCircleWithTextState extends State<_AnimatedCircleWithText> with S
   @override
   void didUpdateWidget(covariant _AnimatedCircleWithText oldWidget) {
     // Spin 180 degrees each time index changes
+    ///每次索引改变时旋转 180 度
     if (oldWidget.index != widget.index) {
+      //缓存上一次的索引
       _prevIndex = oldWidget.index;
       // If the animation is already in motion, we don't need to interrupt it, just let the text change
       if (isAnimStopped) {
@@ -97,11 +117,17 @@ class _AnimatedCircleWithTextState extends State<_AnimatedCircleWithText> with S
     return AnimatedBuilder(
       animation: _anim,
       builder: (_, __) {
+        ///前一个索引>当前索引？
+        ///若是，则逆时针转动-180度；否则顺时针180度
         var rot = _prevIndex > widget.index ? -pi : pi;
         return Transform.rotate(
+          ///控制转盘转动
           angle: Curves.easeInOut.transform(_anim.value) * rot,
           child: Container(
-            decoration: BoxDecoration(shape: BoxShape.circle, color: $styles.colors.offWhite),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: $styles.colors.offWhite,
+            ),
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -109,18 +135,24 @@ class _AnimatedCircleWithTextState extends State<_AnimatedCircleWithText> with S
               // Each time index is changed, the stack is rotated 180 degrees.
               // When the animation completes, the rotation snaps back to 0 and the titles also swap position
               // This creates the effect of a new title always rolling in, with the old rolling out
+              ///2 个反向旋转/相反的圆圈（一个在顶部，一个在底部）
+              /// 每次索引更改时，堆栈都会旋转 180 度。
+              /// 动画完成后，旋转会恢复到 0，标题也会交换位置
+              /// 这会产生新标题始终滚入而旧标题滚出的效果
               child: Semantics(
                 label: newTitle,
                 child: Stack(
                   children: [
                     Transform.rotate(
                       angle: _anim.isCompleted ? rot : 0,
-                      child: _buildCircularText(_anim.isCompleted ? newTitle : oldTitle),
+                      child: _buildCircularText(
+                          _anim.isCompleted ? newTitle : oldTitle),
                     ),
                     if (!_anim.isCompleted) ...[
                       Transform.rotate(
                         angle: _anim.isCompleted ? 0 : rot,
-                        child: _buildCircularText(_anim.isCompleted ? oldTitle : newTitle),
+                        child: _buildCircularText(
+                            _anim.isCompleted ? oldTitle : newTitle),
                       ),
                     ]
                   ],

@@ -16,6 +16,7 @@ part 'widgets/_collection_list.dart';
 part 'widgets/_collection_list_card.dart';
 part 'widgets/_newly_discovered_items_btn.dart';
 
+///首页左上角菜单-点击打开的藏品页
 class CollectionScreen extends StatefulWidget with GetItStatefulWidgetMixin {
   CollectionScreen({required this.fromId, Key? key}) : super(key: key);
 
@@ -61,7 +62,6 @@ class _CollectionScreenState extends State<CollectionScreen>
     int discovered = collectiblesLogic.discoveredCount;
     int explored = collectiblesLogic.exploredCount;
     int total = collectiblesLogic.all.length;
-
     return ColoredBox(
       color: $styles.colors.greyStrong,
       child: Column(

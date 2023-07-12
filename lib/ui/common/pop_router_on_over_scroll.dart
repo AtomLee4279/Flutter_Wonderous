@@ -1,7 +1,9 @@
 import 'package:wonders/common_libs.dart';
 
 class PopRouterOnOverScroll extends StatefulWidget {
-  const PopRouterOnOverScroll({Key? key, required this.child, required this.controller}) : super(key: key);
+  const PopRouterOnOverScroll(
+      {Key? key, required this.child, required this.controller})
+      : super(key: key);
   final ScrollController controller;
   final Widget child;
 
@@ -10,6 +12,7 @@ class PopRouterOnOverScroll extends StatefulWidget {
 }
 
 class _PopRouterOnOverScrollState extends State<PopRouterOnOverScroll> {
+  ///滚动到顶部的临界点
   final _scrollToPopThreshold = 70;
   bool _isPointerDown = false;
 
@@ -37,8 +40,10 @@ class _PopRouterOnOverScrollState extends State<PopRouterOnOverScroll> {
     );
   }
 
+  ///负责向下拖动到一定程度后，将界面pop出去
   void _handleScrollChanged() {
     // If user pulls far down on the elastic list, pop back to
+    ///
     final px = widget.controller.position.pixels;
     if (px < -_scrollToPopThreshold) {
       if (_isPointerDown) {

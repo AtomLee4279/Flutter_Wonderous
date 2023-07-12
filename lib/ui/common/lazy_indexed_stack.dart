@@ -24,7 +24,8 @@ class LazyIndexedStack extends StatefulWidget {
 class LazyIndexedStackState extends State<LazyIndexedStack> {
   late List<bool> _activated = _initializeActivatedList();
 
-  List<bool> _initializeActivatedList() => List<bool>.generate(widget.children.length, (i) => i == widget.index);
+  List<bool> _initializeActivatedList() =>
+      List<bool>.generate(widget.children.length, (i) => i == widget.index);
 
   @override
   void didUpdateWidget(covariant LazyIndexedStack oldWidget) {
@@ -41,6 +42,9 @@ class LazyIndexedStackState extends State<LazyIndexedStack> {
     final children = List.generate(_activated.length, (i) {
       return _activated[i] ? widget.children[i] : const SizedBox.shrink();
     });
+
+    ///IndexedStack:根据index切换不同的widget，
+    ///一次只展示一项，而且保存所有子项的状态
     return IndexedStack(
       alignment: widget.alignment,
       sizing: widget.sizing,

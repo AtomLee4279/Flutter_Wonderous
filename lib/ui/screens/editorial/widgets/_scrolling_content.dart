@@ -1,7 +1,8 @@
 part of '../editorial_screen.dart';
 
 class _ScrollingContent extends StatelessWidget {
-  const _ScrollingContent(this.data, {Key? key, required this.scrollPos, required this.sectionNotifier})
+  const _ScrollingContent(this.data,
+      {Key? key, required this.scrollPos, required this.sectionNotifier})
       : super(key: key);
   final WonderData data;
   final ValueNotifier<double> scrollPos;
@@ -10,24 +11,34 @@ class _ScrollingContent extends StatelessWidget {
   String _fixNewlines(String text) {
     const nl = '\n';
     final chunks = text.split(nl);
+
+    ///删除所有换行符
     while (chunks.last == nl) {
       chunks.removeLast();
     }
+
+    ///删除空字符串
     chunks.removeWhere((element) => element.trim().isEmpty);
+
+    ///将所有“被紧凑化的”字符串元素以两个换行符作为间隔，组合起来
     final result = chunks.join('$nl$nl');
     return result;
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget buildText(String value) => Focus(child: Text(_fixNewlines(value), style: $styles.text.body));
+    ///将文本内容进行处理，使之带上换行符号且父控件为Focus
+    Widget buildText(String value) =>
+        Focus(child: Text(_fixNewlines(value), style: $styles.text.body));
 
+    ///首字下沉
     Widget buildDropCapText(String value) {
       final TextStyle dropStyle = $styles.text.dropCase;
       final TextStyle bodyStyle = $styles.text.body;
       final String dropChar = value.substring(0, 1);
       final textScale = MediaQuery.of(context).textScaleFactor;
-      final double dropCapWidth = StringUtils.measure(dropChar, dropStyle).width * textScale;
+      final double dropCapWidth =
+          StringUtils.measure(dropChar, dropStyle).width * textScale;
       final bool skipCaps = !localeLogic.isEnglish;
       return Semantics(
         label: value,
@@ -37,9 +48,12 @@ class _ScrollingContent extends StatelessWidget {
                   _fixNewlines(value).substring(1),
                   dropCap: DropCap(
                     width: dropCapWidth,
-                    height: $styles.text.body.fontSize! * $styles.text.body.height! * 2,
+                    height: $styles.text.body.fontSize! *
+                        $styles.text.body.height! *
+                        2,
                     child: Transform.translate(
-                      offset: Offset(0, bodyStyle.fontSize! * (bodyStyle.height! - 1) - 2),
+                      offset: Offset(
+                          0, bodyStyle.fontSize! * (bodyStyle.height! - 1) - 2),
                       child: Text(
                         dropChar,
                         overflow: TextOverflow.visible,
@@ -62,6 +76,7 @@ class _ScrollingContent extends StatelessWidget {
       );
     }
 
+    ///可收集的藏品控件
     Widget buildHiddenCollectible({required int slot}) {
       List<WonderType> getTypesForSlot(slot) {
         switch (slot) {
@@ -92,51 +107,63 @@ class _ScrollingContent extends StatelessWidget {
           delegate: SliverChildListDelegate.fixed([
             Center(
               child: SizedBox(
+                ///此处其实约束了水平方向子widget文本最大宽度
                 width: $styles.sizes.maxContentWidth1,
+
+                ///Row和Column都只会在主轴方向占用尽可能大的空间，
+                ///而cross轴的长度则取决于他们最大子元素的长度
                 child: Column(children: [
-                  ..._contentSection([
-                    Center(child: buildHiddenCollectible(slot: 0)),
+                  ..._contentSection(
+                    [
+                      Center(child: buildHiddenCollectible(slot: 0)),
 
-                    /// History 1
-                    buildDropCapText(data.historyInfo1),
+                      /// History 1
+                      buildDropCapText(data.historyInfo1),
 
-                    /// Quote1
-                    _CollapsingPullQuoteImage(data: data, scrollPos: scrollPos),
-                    Center(child: buildHiddenCollectible(slot: 1)),
+                      /// Quote1
+                      _CollapsingPullQuoteImage(
+                          data: data, scrollPos: scrollPos),
+                      Center(child: buildHiddenCollectible(slot: 1)),
 
-                    /// Callout1
-                    _Callout(text: data.callout1),
+                      /// Callout1
+                      _Callout(text: data.callout1),
 
-                    /// History 2
-                    buildText(data.historyInfo2),
-                    _SectionDivider(scrollPos, sectionNotifier, index: 1),
+                      /// History 2
+                      buildText(data.historyInfo2),
+                      _SectionDivider(scrollPos, sectionNotifier, index: 1),
 
-                    /// Construction 1
-                    buildDropCapText(data.constructionInfo1),
-                    Center(child: buildHiddenCollectible(slot: 2)),
-                  ]),
+                      /// Construction 1
+                      buildDropCapText(data.constructionInfo1),
+                      Center(child: buildHiddenCollectible(slot: 2)),
+                    ],
+                  ),
                   Gap($styles.insets.md),
-                  _YouTubeThumbnail(id: data.videoId, caption: data.videoCaption),
+                  _YouTubeThumbnail(
+                      id: data.videoId, caption: data.videoCaption),
                   Gap($styles.insets.md),
-                  ..._contentSection([
-                    /// Callout2
-                    Gap($styles.insets.xs),
-                    _Callout(text: data.callout2),
+                  ..._contentSection(
+                    [
+                      /// Callout2
+                      Gap($styles.insets.xs),
+                      _Callout(text: data.callout2),
 
-                    /// Construction 2
-                    buildText(data.constructionInfo2),
-                    _SlidingImageStack(scrollPos: scrollPos, type: data.type),
-                    _SectionDivider(scrollPos, sectionNotifier, index: 2),
+                      /// Construction 2
+                      buildText(data.constructionInfo2),
+                      _SlidingImageStack(scrollPos: scrollPos, type: data.type),
+                      _SectionDivider(scrollPos, sectionNotifier, index: 2),
 
-                    /// Location
-                    buildDropCapText(data.locationInfo1),
-                    _LargeSimpleQuote(text: data.pullQuote2, author: data.pullQuote2Author),
-                    buildText(data.locationInfo2),
-                  ]),
+                      /// Location
+                      buildDropCapText(data.locationInfo1),
+                      _LargeSimpleQuote(
+                          text: data.pullQuote2, author: data.pullQuote2Author),
+                      buildText(data.locationInfo2),
+                    ],
+                  ),
                   Gap($styles.insets.md),
                   AspectRatio(aspectRatio: 1.65, child: _MapsThumbnail(data)),
                   Gap($styles.insets.md),
-                  ..._contentSection([Center(child: buildHiddenCollectible(slot: 3))]),
+                  ..._contentSection(
+                      [Center(child: buildHiddenCollectible(slot: 3))]),
                   Gap(150),
                 ]),
               ),
@@ -148,7 +175,9 @@ class _ScrollingContent extends StatelessWidget {
   }
 
   /// Helper widget to provide hz padding to multiple widgets. Keeps the layout of the scrolling content cleaner.
+  /// 确保了文本宽度不会被无限拉伸
   List<Widget> _contentSection(List<Widget> children) {
+    ///返回一个带水平边距、子控件间带垂直内间距的widget数组
     return [
       for (int i = 0; i < children.length - 1; i++) ...[
         Padding(
@@ -157,6 +186,8 @@ class _ScrollingContent extends StatelessWidget {
         ),
         Gap($styles.insets.md)
       ],
+
+      ///最后一个widget，底下不再需要Gap
       Padding(
         padding: EdgeInsets.symmetric(horizontal: $styles.insets.md),
         child: children.last,
@@ -166,7 +197,8 @@ class _ScrollingContent extends StatelessWidget {
 }
 
 class _YouTubeThumbnail extends StatelessWidget {
-  const _YouTubeThumbnail({Key? key, required this.id, required this.caption}) : super(key: key);
+  const _YouTubeThumbnail({Key? key, required this.id, required this.caption})
+      : super(key: key);
   final String id;
   final String caption;
 
@@ -184,7 +216,10 @@ class _YouTubeThumbnail extends StatelessWidget {
               semanticLabel: $strings.scrollingContentSemanticYoutube,
               onPressed: handlePressed,
               child: Stack(children: [
-                AppImage(image: NetworkImage(imageUrl), fit: BoxFit.cover, scale: 1.0),
+                AppImage(
+                    image: NetworkImage(imageUrl),
+                    fit: BoxFit.cover,
+                    scale: 1.0),
                 Positioned.fill(
                   child: Center(
                     child: Container(
@@ -223,7 +258,8 @@ class _MapsThumbnail extends StatefulWidget {
 }
 
 class _MapsThumbnailState extends State<_MapsThumbnail> {
-  CameraPosition get startPos => CameraPosition(target: LatLng(widget.data.lat, widget.data.lng), zoom: 3);
+  CameraPosition get startPos =>
+      CameraPosition(target: LatLng(widget.data.lat, widget.data.lng), zoom: 3);
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +278,8 @@ class _MapsThumbnailState extends State<_MapsThumbnail> {
                 /// To prevent the map widget from absorbing the onPressed action, use a Stack + IgnorePointer + a transparent Container
                 child: Stack(
                   children: [
-                    Positioned.fill(child: ColoredBox(color: Colors.transparent)),
+                    Positioned.fill(
+                        child: ColoredBox(color: Colors.transparent)),
                     IgnorePointer(
                       child: GoogleMap(
                         markers: {getMapsMarker(startPos.target)},
@@ -289,7 +326,8 @@ class SliverBackgroundColor extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderSliverBackgroundColor renderObject) {
+  void updateRenderObject(
+      BuildContext context, RenderSliverBackgroundColor renderObject) {
     renderObject.color = color;
   }
 }
@@ -310,9 +348,10 @@ class RenderSliverBackgroundColor extends RenderProxySliver {
   @override
   void paint(PaintingContext context, Offset offset) {
     if (child != null && child!.geometry!.visible) {
-      final SliverPhysicalParentData childParentData = child!.parentData! as SliverPhysicalParentData;
-      final Rect childRect =
-          offset + childParentData.paintOffset & Size(constraints.crossAxisExtent, child!.geometry!.paintExtent);
+      final SliverPhysicalParentData childParentData =
+          child!.parentData! as SliverPhysicalParentData;
+      final Rect childRect = offset + childParentData.paintOffset &
+          Size(constraints.crossAxisExtent, child!.geometry!.paintExtent);
       context.canvas.drawRect(
           childRect,
           Paint()

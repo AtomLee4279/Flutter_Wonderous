@@ -192,6 +192,7 @@ class _Insets {
   _Insets(this._scale);
   final double _scale;
 
+  ///这个[_scale]在外部由[AppStyle]中的scale赋值初始化
   late final double xxs = 4 * _scale;
   late final double xs = 8 * _scale;
   late final double sm = 16 * _scale;

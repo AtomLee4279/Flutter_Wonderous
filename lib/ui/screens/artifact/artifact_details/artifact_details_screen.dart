@@ -6,11 +6,14 @@ import 'package:wonders/ui/common/controls/app_loading_indicator.dart';
 import 'package:wonders/ui/common/gradient_container.dart';
 import 'package:wonders/ui/common/modals/fullscreen_url_img_viewer.dart';
 
-part 'widgets/_info_column.dart';
 part 'widgets/_image_btn.dart';
+part 'widgets/_info_column.dart';
 
+///艺术品详情页，
+///由点击艺术品轮盘某项入口打开
 class ArtifactDetailsScreen extends StatefulWidget {
-  const ArtifactDetailsScreen({Key? key, required this.artifactId}) : super(key: key);
+  const ArtifactDetailsScreen({Key? key, required this.artifactId})
+      : super(key: key);
   final String artifactId;
 
   @override
@@ -38,7 +41,10 @@ class _ArtifactDetailsScreenState extends State<ArtifactDetailsScreen> {
             content = hzMode
                 ? Row(children: [
                     Expanded(child: _ImageBtn(data: data!)),
-                    Expanded(child: Center(child: SizedBox(width: 600, child: _InfoColumn(data: data)))),
+                    Expanded(
+                        child: Center(
+                            child: SizedBox(
+                                width: 600, child: _InfoColumn(data: data)))),
                   ])
                 : CustomScrollView(
                     slivers: [

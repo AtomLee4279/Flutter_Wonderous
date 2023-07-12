@@ -85,13 +85,13 @@ class _WonderDetailsScreenState extends State<WonderDetailsScreen>
               ArtifactCarouselScreen(
                   type: wonder.type, contentPadding: menuPadding),
 
-              ///奇迹建筑历史页
+              ///奇迹事件页（提供时间线页面入口）
               WonderEvents(type: widget.type, contentPadding: menuPadding),
             ],
           ),
 
           /// Tab menu
-          /// 借助Align放置Wonders详情页导航栏（NavigationBar/NavigationRail）
+          /// 借助Align放置Wonders详情页tab栏（NavigationBar/NavigationRail）
           Align(
             alignment:
                 _useNavRail ? Alignment.centerLeft : Alignment.bottomCenter,

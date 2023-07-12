@@ -33,15 +33,18 @@ class _WallpaperPhotoScreenState extends State<WallpaperPhotoScreen> {
   }
 
   void _handleTakePhoto(BuildContext context, String wonderName) async {
-    final boundary = _containerKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+    final boundary = _containerKey.currentContext?.findRenderObject()
+        as RenderRepaintBoundary?;
     if (boundary != null) {
       wallpaperLogic.save(this, boundary, name: '${wonderName}_wallpaper');
     }
   }
 
   void _handleSharePhoto(BuildContext context, String wonderName) async {
-    final boundary = _containerKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    wallpaperLogic.share(context, boundary, name: '${wonderName}_wallpaper', wonderName: wonderName);
+    final boundary = _containerKey.currentContext!.findRenderObject()
+        as RenderRepaintBoundary;
+    wallpaperLogic.share(context, boundary,
+        name: '${wonderName}_wallpaper', wonderName: wonderName);
   }
 
   void _handleTextToggle(bool? isActive) {
@@ -120,7 +123,8 @@ class _WallpaperPhotoScreenState extends State<WallpaperPhotoScreen> {
 
     return Stack(children: [
       Container(
-        decoration: BoxDecoration(backgroundBlendMode: BlendMode.color, color: Colors.blue),
+        decoration: BoxDecoration(
+            backgroundBlendMode: BlendMode.color, color: Colors.blue),
         child: _illustration ?? Container(),
       ),
       TopCenter(
@@ -140,12 +144,16 @@ class _WallpaperPhotoScreenState extends State<WallpaperPhotoScreen> {
                 ),
                 Expanded(child: Container()),
                 Padding(
-                  padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, right: 16.0),
+                  padding: const EdgeInsets.only(
+                      top: 10.0, bottom: 10.0, right: 16.0),
                   child: CircleIconBtn(
-                    icon: PlatformInfo.isIOS ? AppIcons.share_ios : AppIcons.share_android,
+                    icon: PlatformInfo.isIOS
+                        ? AppIcons.share_ios
+                        : AppIcons.share_android,
                     bgColor: $styles.colors.offWhite,
                     color: $styles.colors.black,
-                    onPressed: () => _handleSharePhoto(context, wonderData.title),
+                    onPressed: () =>
+                        _handleSharePhoto(context, wonderData.title),
                     semanticLabel: $strings.wallpaperSemanticSharePhoto,
                     size: 44,
                   ),
@@ -166,7 +174,9 @@ class _WallpaperPhotoScreenState extends State<WallpaperPhotoScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             SimpleCheckbox(
-                active: _showTitleText, label: $strings.wallpaperCheckboxShowTitle, onToggled: _handleTextToggle),
+                active: _showTitleText,
+                label: $strings.wallpaperCheckboxShowTitle,
+                onToggled: _handleTextToggle),
             Gap($styles.insets.xl),
           ],
         ),

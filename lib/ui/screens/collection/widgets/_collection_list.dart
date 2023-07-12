@@ -51,7 +51,7 @@ class _CollectionList extends StatelessWidget with GetItMixin {
         ///所有收藏品外边距
         padding: EdgeInsets.all($styles.insets.lg),
 
-        ///SeparatedFlex:封装了分割线设定的Row/Column
+        ///SeparatedFlex:封装了带分割线的Row/Column
         child: SeparatedFlex(
           direction: vtMode ? Axis.vertical : Axis.horizontal,
           mainAxisSize: MainAxisSize.min,

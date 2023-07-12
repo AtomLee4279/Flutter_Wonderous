@@ -1,5 +1,6 @@
 import 'package:wonders/common_libs.dart';
 
+///Wonder详情页底下/侧边的菜单tab按钮
 class WonderDetailsTabMenu extends StatelessWidget {
   static const double buttonInset = 12;
 
