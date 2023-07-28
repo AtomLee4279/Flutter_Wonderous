@@ -1,5 +1,6 @@
 part of '../wonder_events.dart';
 
+///WonderEvents里的列表内容
 class _EventsList extends StatefulWidget {
   const _EventsList({
     Key? key,
@@ -40,7 +41,9 @@ class _EventsListState extends State<_EventsList> {
   }
 
   /// The actual content of the scrolling list
+  /// 滚动列表真正的内容
   Widget _buildScrollingList() {
+    ///列表上面的圆角矩形indicator
     Container buildHandle() {
       return Container(
         width: 35,
@@ -78,6 +81,9 @@ class _EventsListState extends State<_EventsList> {
                   color: $styles.colors.black,
                   borderRadius: BorderRadius.circular($styles.corners.md),
                 ),
+
+                ///这里指定卡片外间距，间接决定了每张卡片要被拉伸到多长
+                ///当界面进入不同断点的区间范围的时候，具体值会有所不同
                 padding: EdgeInsets.symmetric(horizontal: $styles.insets.md),
                 child: Column(
                   children: [

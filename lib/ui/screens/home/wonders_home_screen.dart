@@ -10,7 +10,8 @@ import 'package:wonders/ui/screens/home_menu/home_menu.dart';
 import 'package:wonders/ui/wonder_illustrations/common/animated_clouds.dart';
 import 'package:wonders/ui/wonder_illustrations/common/wonder_illustration.dart';
 import 'package:wonders/ui/wonder_illustrations/common/wonder_illustration_config.dart';
-import 'package:wonders/ui/wonder_illustrations/common/wonder_title_text.dart';
+
+import '../../wonder_illustrations/common/wonder_title_text.dart';
 
 part '_vertical_swipe_controller.dart';
 part 'widgets/_animated_arrow_button.dart';
@@ -307,6 +308,7 @@ class _HomeScreenState extends State<HomeScreen>
                         offset: Offset(0, 30),
                         child: Column(
                           children: [
+                            ///靠近底部，切换历史古迹Indicator之上的当前古迹标题
                             Semantics(
                               liveRegion: true,
                               button: true,

@@ -41,16 +41,23 @@ class _CollectibleImage extends StatelessWidget {
     );
   }
 
-  Widget _buildFound(BuildContext context, CollectibleData collectible, int state) {
+  Widget _buildFound(
+      BuildContext context, CollectibleData collectible, int state) {
     final bool isNew = state == CollectibleState.discovered;
     Widget content = Container(
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(
         color: $styles.colors.black,
-        border: isNew ? Border.all(color: $styles.colors.accent1, width: 3) : null,
-        boxShadow:
-            !isNew ? null : [BoxShadow(color: $styles.colors.accent1.withOpacity(0.6), blurRadius: $styles.insets.sm)],
+        border:
+            isNew ? Border.all(color: $styles.colors.accent1, width: 3) : null,
+        boxShadow: !isNew
+            ? null
+            : [
+                BoxShadow(
+                    color: $styles.colors.accent1.withOpacity(0.6),
+                    blurRadius: $styles.insets.sm)
+              ],
       ),
       child: AppImage(
         image: NetworkImage(collectible.imageUrlSmall),

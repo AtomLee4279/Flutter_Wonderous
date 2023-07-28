@@ -49,6 +49,7 @@ final appRouter = GoRouter(
           AppRoute(ScreenPaths.intro, (_) => IntroScreen()),
 
           ///WonderDetailsScreen：被首页HomeScreen push进来
+          ///侧边/底部菜单栏在这里面部署
           AppRoute('/wonder/:type', (s) {
             int tab = int.tryParse(s.queryParams['t'] ?? '') ?? 0;
             return WonderDetailsScreen(

@@ -29,15 +29,18 @@ class _CollectionList extends StatelessWidget with GetItMixin {
     watchX((CollectiblesLogic o) => o.statesById);
     List<WonderData> wonders = wondersLogic.all;
     bool vtMode = context.isLandscape == false;
+    debugPrint('_CollectionList_vtMode:$vtMode');
     final scrollWonder = scrollTargetWonder;
     // Create list of collections that is shared by both hz and vt layouts
     ///创建一个支持水平和垂直布局的列表
     List<Widget> collections = [
-      ///'...'表示仍是List中的元素？
+      ///'...'表示仍是List中的元素
       ...wonders.map((d) {
         return _CollectionListCard(
           key: d.type == scrollWonder ? scrollKey : null,
           height: vtMode ? 300 : 400,
+
+          ///判断是否垂直模式：若是，则宽度不受限制（实际是在第一个断点范围内做一定程度的拉伸）
           width: vtMode ? null : 600,
           fromId: fromId,
           data: d,

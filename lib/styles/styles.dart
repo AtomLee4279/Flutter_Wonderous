@@ -15,6 +15,8 @@ class AppStyle {
       scale = 1;
       return;
     }
+
+    ///由屏幕最短边决定放缩比例
     final shortestSide = screenSize.shortestSide;
     const tabletXl = 1000;
     const tabletLg = 800;
